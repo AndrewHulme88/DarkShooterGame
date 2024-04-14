@@ -1,0 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Bullet : DamageController
+{
+    private Rigidbody2D rb;
+    private Animator anim;
+
+    private float xSpeed;
+    private float ySpeed;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        rb.velocity = new Vector2(xSpeed, ySpeed);
+    }
+
+    public void SetupSpeed(float x, float y)
+    {
+        xSpeed = x;
+        ySpeed = y;
+    }
+
+   // private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    anim.SetTrigger("impact");
+    //}
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Enemy>() != null)
+        {
+            collision.GetComponent<Enemy>().Damage();
+        }
+
+        base.OnTriggerEnter2D(collision);
+        Destroy(gameObject);
+    }
+}
